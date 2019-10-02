@@ -10,3 +10,6 @@ docs linguist-documentation
 *_string.go linguist-generated
 *_gen.go linguist-generated
 vendor/* linguist-vendored
+
+api/2019-09/meta/*   linguist-language=JSON
+api/2019-09/output/* linguist-language=JSON
