@@ -4,9 +4,16 @@
 
 package jsonschema
 
-import (
-	"regexp"
-)
+type Regexp interface {
+	FindSubmatch(s []byte) [][]byte
+	FindStringSubmatch(s string) []string
+	FindStringSubmatchIndex(s string) []int
+	ReplaceAllString(src, repl string) string
+	FindString(s string) string
+	FindAllString(s string, n int) []string
+	MatchString(s string) bool
+	SubexpNames() []string
+}
 
 type StringArray []String
 
@@ -17,7 +24,7 @@ type Items struct {
 	HasMultiple bool
 }
 
-type Pattern regexp.Regexp
+type Pattern Regexp
 
 type AdditionalItems struct {
 	Schema
@@ -31,7 +38,7 @@ type Definitions map[string]Schema
 
 type Properties map[string]Schema
 
-type PatternProperties map[*regexp.Regexp]Schema
+type PatternProperties map[Regexp]Schema
 
 type DependencyMap struct {
 	Names   map[string][]string
