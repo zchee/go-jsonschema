@@ -21,6 +21,13 @@ type Regexp struct {
 	rx   *regexp.Regexp
 }
 
+// MustCompile creates a new lazy regexp, delaying the compiling work until it is first
+// needed. If the code is being run as part of tests, the regexp compiling will
+// happen immediately.
+func MustCompile(str string) *Regexp {
+	return &Regexp{str: str}
+}
+
 func (r *Regexp) re() *regexp.Regexp {
 	r.once.Do(r.build)
 	return r.rx
@@ -29,6 +36,10 @@ func (r *Regexp) re() *regexp.Regexp {
 func (r *Regexp) build() {
 	r.rx = regexp.MustCompile(r.str)
 	r.str = ""
+}
+
+func (r *Regexp) String() string {
+	return r.re().String()
 }
 
 func (r *Regexp) FindSubmatch(s []byte) [][]byte {
@@ -61,11 +72,4 @@ func (r *Regexp) MatchString(s string) bool {
 
 func (r *Regexp) SubexpNames() []string {
 	return r.re().SubexpNames()
-}
-
-// New creates a new lazy regexp, delaying the compiling work until it is first
-// needed. If the code is being run as part of tests, the regexp compiling will
-// happen immediately.
-func New(str string) *Regexp {
-	return &Regexp{str: str}
 }
