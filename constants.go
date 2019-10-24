@@ -21,24 +21,6 @@ const (
 //  https://tools.ietf.org/html/draft-handrews-json-schema-01#section-4.3
 const MediaType = "application/schema+json"
 
-// Type represents a JSON Schema primitive type.
-type Type int
-
-// The list of simple types.
-const (
-	UnspecifiedType Type = iota
-	ArrayType
-	BooleanType
-	IntegerType
-	NullType
-	NumberType
-	ObjectType
-	StringType
-)
-
-// Types represents a list of Type.
-type Types []Type
-
 // Format allows for basic semantic validation on certain kinds of string values that are commonly used.
 // This allows values to be constrained beyond what the other tools in JSON Schema, including Regular Expressions can do.
 type Format string
