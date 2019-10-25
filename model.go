@@ -30,8 +30,8 @@ var (
 
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (a *Array) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.ArrayKey("Value", (*Interfaces)(&a.Value))
-	enc.BoolKey("Initialized", a.Initialized)
+	enc.ArrayKey(keyValue, (*Interfaces)(&a.Value))
+	enc.BoolKey(keyInitialized, a.Initialized)
 }
 
 // IsNil implements gojay.MarshalerJSONObject.
@@ -44,7 +44,7 @@ func (a *Array) IsNil() bool {
 // UnmarshalJSONObject implements gojay.UnmarshalerJSONObject.
 func (a *Array) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 	switch k {
-	case "Value":
+	case keyValue:
 		var ifaces = Interfaces{}
 		err := dec.Array(&ifaces)
 		if err == nil && len(ifaces) > 0 {
@@ -52,7 +52,7 @@ func (a *Array) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "Initialized":
+	case keyInitialized:
 		return dec.Bool(&a.Initialized)
 	}
 
@@ -125,9 +125,9 @@ var (
 
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (b *Boolean) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.BoolKey("Value", b.Value)
-	enc.BoolKey("Default", b.Default)
-	enc.BoolKey("Initialized", b.Initialized)
+	enc.BoolKey(keyValue, b.Value)
+	enc.BoolKey(keyDefault, b.Default)
+	enc.BoolKey(keyInitialized, b.Initialized)
 }
 
 // IsNil implements gojay.MarshalerJSONObject.
@@ -140,13 +140,13 @@ func (b *Boolean) IsNil() bool {
 // UnmarshalJSONObject implements gojay.UnmarshalerJSONObject.
 func (b *Boolean) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 	switch k {
-	case "Value":
+	case keyValue:
 		return dec.Bool(&b.Value)
 
-	case "Default":
+	case keyDefault:
 		return dec.Bool(&b.Default)
 
-	case "Initialized":
+	case keyInitialized:
 		return dec.Bool(&b.Initialized)
 	}
 
@@ -217,8 +217,8 @@ var (
 
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (i *Integer) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.Int64Key("Value", i.Value)
-	enc.BoolKey("Initialized", i.Initialized)
+	enc.Int64Key(keyValue, i.Value)
+	enc.BoolKey(keyInitialized, i.Initialized)
 }
 
 // IsNil implements gojay.MarshalerJSONObject.
@@ -231,10 +231,10 @@ func (i *Integer) IsNil() bool {
 // UnmarshalJSONObject implements gojay.UnmarshalerJSONObject.
 func (i *Integer) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 	switch k {
-	case "Value":
+	case keyValue:
 		return dec.Int64(&i.Value)
 
-	case "Initialized":
+	case keyInitialized:
 		return dec.Bool(&i.Initialized)
 	}
 
@@ -305,8 +305,8 @@ var (
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (n *Null) MarshalJSONObject(enc *gojay.Encoder) {
 	raw := gojay.EmbeddedJSON(n.Value)
-	enc.AddEmbeddedJSONKey("Value", &raw)
-	enc.BoolKey("Initialized", n.Initialized)
+	enc.AddEmbeddedJSONKey(keyValue, &raw)
+	enc.BoolKey(keyInitialized, n.Initialized)
 }
 
 // IsNil implements gojay.MarshalerJSONObject.
@@ -319,7 +319,7 @@ func (n *Null) IsNil() bool {
 // UnmarshalJSONObject implements gojay.UnmarshalerJSONObject.
 func (n *Null) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 	switch k {
-	case "Value":
+	case keyValue:
 		raw := gojay.EmbeddedJSON{}
 		err := dec.AddEmbeddedJSON(&raw)
 		if err == nil && len(raw) > 0 {
@@ -327,7 +327,7 @@ func (n *Null) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "Initialized":
+	case keyInitialized:
 		return dec.Bool(&n.Initialized)
 	}
 
@@ -397,8 +397,8 @@ var (
 
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (n *Number) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.Float64Key("Value", n.Value)
-	enc.BoolKey("Initialized", n.Initialized)
+	enc.Float64Key(keyValue, n.Value)
+	enc.BoolKey(keyInitialized, n.Initialized)
 }
 
 // IsNil implements gojay.MarshalerJSONObject.
@@ -411,10 +411,10 @@ func (n *Number) IsNil() bool {
 // UnmarshalJSONObject implements gojay.UnmarshalerJSONObject.
 func (n *Number) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 	switch k {
-	case "Value":
+	case keyValue:
 		return dec.Float64(&n.Value)
 
-	case "Initialized":
+	case keyInitialized:
 		return dec.Bool(&n.Initialized)
 	}
 
@@ -486,8 +486,8 @@ var (
 
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (o *Object) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.AddInterfaceKey("Value", o.Value)
-	enc.BoolKey("Initialized", o.Initialized)
+	enc.AddInterfaceKey(keyValue, o.Value)
+	enc.BoolKey(keyInitialized, o.Initialized)
 }
 
 // IsNil implements gojay.MarshalerJSONObject.
@@ -500,10 +500,10 @@ func (o *Object) IsNil() bool {
 // UnmarshalJSONObject implements gojay.UnmarshalerJSONObject.
 func (o *Object) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 	switch k {
-	case "Value":
+	case keyValue:
 		return dec.Interface(&o.Value)
 
-	case "Initialized":
+	case keyInitialized:
 		return dec.Bool(&o.Initialized)
 	}
 
@@ -573,8 +573,8 @@ var (
 
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (s *String) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.StringKey("Value", s.Value)
-	enc.BoolKey("Initialized", s.Initialized)
+	enc.StringKey(keyValue, s.Value)
+	enc.BoolKey(keyInitialized, s.Initialized)
 }
 
 // IsNil implements gojay.MarshalerJSONObject.
@@ -587,10 +587,10 @@ func (s *String) IsNil() bool {
 // UnmarshalJSONObject implements gojay.UnmarshalerJSONObject.
 func (s *String) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 	switch k {
-	case "Value":
+	case keyValue:
 		return dec.String(&s.Value)
 
-	case "Initialized":
+	case keyInitialized:
 		return dec.Bool(&s.Initialized)
 	}
 

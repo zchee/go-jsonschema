@@ -412,8 +412,8 @@ type Items struct {
 
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (i *Items) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.ArrayKey("Schemas", (*Schemas)(&i.Schemas))
-	enc.BoolKey("HasMultiple", i.HasMultiple)
+	enc.ArrayKey(keySchemas, (*Schemas)(&i.Schemas))
+	enc.BoolKey(keyHasMultiple, i.HasMultiple)
 }
 
 // IsNil implements gojay.MarshalerJSONObject.
@@ -426,7 +426,7 @@ func (i *Items) IsNil() bool {
 // UnmarshalJSONObject implements gojay.UnmarshalerJSONObject.
 func (i *Items) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 	switch k {
-	case "Schemas":
+	case keySchemas:
 		var ss Schemas
 		err := dec.Array(&ss)
 		if err == nil && len(ss) > 0 {
@@ -434,7 +434,7 @@ func (i *Items) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "HasMultiple":
+	case keyHasMultiple:
 		return dec.Bool(&i.HasMultiple)
 
 	}
@@ -1138,8 +1138,8 @@ var (
 
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (dm *DependencyMap) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.ObjectKey("Names", NameMap(dm.Names))
-	enc.ObjectKey("Schemas", SchemaMap(dm.Schemas))
+	enc.ObjectKey(keyNames, NameMap(dm.Names))
+	enc.ObjectKey(keySchemas, SchemaMap(dm.Schemas))
 }
 
 // IsNil implements gojay.MarshalerJSONObject.
@@ -1152,10 +1152,10 @@ func (dm *DependencyMap) IsNil() bool {
 // UnmarshalJSONObject implements gojay.UnmarshalerJSONObject.
 func (dm *DependencyMap) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 	switch k {
-	case "Names":
+	case keyNames:
 		return dec.Object(NameMap(dm.Names))
 
-	case "Schemas":
+	case keySchemas:
 		return dec.Object(SchemaMap(dm.Schemas))
 	}
 
@@ -1228,8 +1228,8 @@ var (
 
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (c *Const) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.IntKey("Type", int(c.Type))
-	enc.AddInterfaceKey("Value", Interfaces(c.Value))
+	enc.IntKey(keyType, int(c.Type))
+	enc.AddInterfaceKey(keyValue, Interfaces(c.Value))
 }
 
 // IsNil implements gojay.MarshalerJSONObject.
@@ -1242,12 +1242,12 @@ func (c *Const) IsNil() bool {
 // UnmarshalJSONObject implements gojay.UnmarshalerJSONObject.
 func (c *Const) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 	switch k {
-	case "Type":
+	case keyType:
 		itype := int(c.Type)
 		err := dec.Int(&itype)
 		return err
 
-	case "Value":
+	case keyValue:
 		ifaces := Interfaces(c.Value)
 		return dec.Array(&ifaces)
 	}

@@ -78,52 +78,52 @@ var (
 
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (d *Draft7) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.ObjectKey("$schema", &d.Schema)
-	enc.ObjectKeyOmitEmpty("$id", &d.ID)
-	enc.ObjectKeyOmitEmpty("title", &d.Title)
-	enc.ObjectKeyOmitEmpty("$ref", &d.Ref)
-	enc.ObjectKeyOmitEmpty("$comment", &d.Comment)
-	enc.ObjectKeyOmitEmpty("description", &d.Description)
-	enc.AddInterfaceKeyOmitEmpty("default", &d.Default)
-	enc.ObjectKeyOmitEmpty("readOnly", &d.ReadOnly)
-	enc.ObjectKeyOmitEmpty("writeOnly", &d.WriteOnly)
-	enc.ArrayKeyOmitEmpty("examples", &d.Examples)
-	enc.ObjectKeyOmitEmpty("multipleOf", &d.MultipleOf)
-	enc.ObjectKeyOmitEmpty("maximum", &d.Maximum)
-	enc.ObjectKeyOmitEmpty("exclusiveMaximum", &d.ExclusiveMaximum)
-	enc.ObjectKeyOmitEmpty("minimum", &d.Minimum)
-	enc.ObjectKeyOmitEmpty("exclusiveMinimum", &d.ExclusiveMinimum)
-	enc.ObjectKeyOmitEmpty("maxLength", &d.MaxLength)
-	enc.ObjectKeyOmitEmpty("minLength", &d.MinLength)
-	enc.AddInterfaceKeyOmitEmpty("pattern", &d.Pattern)
-	enc.ObjectKeyOmitEmpty("additionalItems", d.AdditionalItems)
-	enc.ObjectKeyOmitEmpty("items", d.Items)
-	enc.ObjectKeyOmitEmpty("maxItems", &d.MaxItems)
-	enc.ObjectKeyOmitEmpty("minItems", &d.MinItems)
-	enc.ObjectKeyOmitEmpty("uniqueItems", &d.UniqueItems)
-	enc.ObjectKeyOmitEmpty("contains", d.Contains)
-	enc.ObjectKeyOmitEmpty("maxProperties", &d.MaxProperties)
-	enc.ObjectKeyOmitEmpty("minProperties", &d.MinProperties)
-	enc.ArrayKeyOmitEmpty("required", &d.Required)
-	enc.ObjectKeyOmitEmpty("additionalProperties", d.AdditionalProperties)
-	enc.ObjectKeyOmitEmpty("definitions", &d.Definitions)
-	enc.ObjectKeyOmitEmpty("properties", &d.Properties)
-	enc.ObjectKeyOmitEmpty("patternProperties", &d.PatternProperties)
-	enc.ObjectKeyOmitEmpty("dependencies", d.Dependencies)
-	enc.ObjectKeyOmitEmpty("propertyNames", d.PropertyNames)
-	enc.ObjectKeyOmitEmpty("const", d.Const)
-	enc.ArrayKeyOmitEmpty("enum", &d.Enum)
-	enc.IntKeyOmitEmpty("type", *(*int)(&d.Type))
-	enc.StringKeyOmitEmpty("format", *(*string)(&d.Format))
-	enc.ObjectKeyOmitEmpty("contentMediaType", &d.ContentMediaType)
-	enc.ObjectKeyOmitEmpty("contentEncoding", &d.ContentEncoding)
-	enc.ObjectKeyOmitEmpty("if", d.If)
-	enc.ObjectKeyOmitEmpty("then", d.Then)
-	enc.ObjectKeyOmitEmpty("else", d.Else)
-	enc.ArrayKeyOmitEmpty("allOf", &d.AllOf)
-	enc.ArrayKeyOmitEmpty("anyOf", &d.AnyOf)
-	enc.ArrayKeyOmitEmpty("oneOf", &d.OneOf)
-	enc.ObjectKeyOmitEmpty("not", d.Not)
+	enc.ObjectKey(keySchema, &d.Schema)
+	enc.ObjectKeyOmitEmpty(keyID, &d.ID)
+	enc.ObjectKeyOmitEmpty(keyTitle, &d.Title)
+	enc.ObjectKeyOmitEmpty(keyRef, &d.Ref)
+	enc.ObjectKeyOmitEmpty(keyComment, &d.Comment)
+	enc.ObjectKeyOmitEmpty(keyDescription, &d.Description)
+	enc.AddInterfaceKeyOmitEmpty(keyDefault, &d.Default)
+	enc.ObjectKeyOmitEmpty(keyReadOnly, &d.ReadOnly)
+	enc.ObjectKeyOmitEmpty(keyWriteOnly, &d.WriteOnly)
+	enc.ArrayKeyOmitEmpty(keyExamples, &d.Examples)
+	enc.ObjectKeyOmitEmpty(keyMultipleOf, &d.MultipleOf)
+	enc.ObjectKeyOmitEmpty(keyMaximum, &d.Maximum)
+	enc.ObjectKeyOmitEmpty(keyExclusiveMaximum, &d.ExclusiveMaximum)
+	enc.ObjectKeyOmitEmpty(keyMinimum, &d.Minimum)
+	enc.ObjectKeyOmitEmpty(keyExclusiveMinimum, &d.ExclusiveMinimum)
+	enc.ObjectKeyOmitEmpty(keyMaxLength, &d.MaxLength)
+	enc.ObjectKeyOmitEmpty(keyMinLength, &d.MinLength)
+	enc.AddInterfaceKeyOmitEmpty(keyPattern, &d.Pattern)
+	enc.ObjectKeyOmitEmpty(keyAdditionalItems, d.AdditionalItems)
+	enc.ObjectKeyOmitEmpty(keyItems, d.Items)
+	enc.ObjectKeyOmitEmpty(keyMaxItems, &d.MaxItems)
+	enc.ObjectKeyOmitEmpty(keyMinItems, &d.MinItems)
+	enc.ObjectKeyOmitEmpty(keyUniqueItems, &d.UniqueItems)
+	enc.ObjectKeyOmitEmpty(keyContains, d.Contains)
+	enc.ObjectKeyOmitEmpty(keyMaxProperties, &d.MaxProperties)
+	enc.ObjectKeyOmitEmpty(keyMinProperties, &d.MinProperties)
+	enc.ArrayKeyOmitEmpty(keyRequired, &d.Required)
+	enc.ObjectKeyOmitEmpty(keyAdditionalProperties, d.AdditionalProperties)
+	enc.ObjectKeyOmitEmpty(keyDefinitions, &d.Definitions)
+	enc.ObjectKeyOmitEmpty(keyProperties, &d.Properties)
+	enc.ObjectKeyOmitEmpty(keyPatternProperties, &d.PatternProperties)
+	enc.ObjectKeyOmitEmpty(keyDependencies, d.Dependencies)
+	enc.ObjectKeyOmitEmpty(keyPropertyNames, d.PropertyNames)
+	enc.ObjectKeyOmitEmpty(keyConst, d.Const)
+	enc.ArrayKeyOmitEmpty(keyEnum, &d.Enum)
+	enc.IntKeyOmitEmpty(keyType, *(*int)(&d.Type))
+	enc.StringKeyOmitEmpty(keyFormat, *(*string)(&d.Format))
+	enc.ObjectKeyOmitEmpty(keyContentMediaType, &d.ContentMediaType)
+	enc.ObjectKeyOmitEmpty(keyContentEncoding, &d.ContentEncoding)
+	enc.ObjectKeyOmitEmpty(keyIf, d.If)
+	enc.ObjectKeyOmitEmpty(keyThen, d.Then)
+	enc.ObjectKeyOmitEmpty(keyElse, d.Else)
+	enc.ArrayKeyOmitEmpty(keyAllOf, &d.AllOf)
+	enc.ArrayKeyOmitEmpty(keyAnyOf, &d.AnyOf)
+	enc.ArrayKeyOmitEmpty(keyOneOf, &d.OneOf)
+	enc.ObjectKeyOmitEmpty(keyNot, d.Not)
 }
 
 // IsNil implements gojay.MarshalerJSONObject.
@@ -136,7 +136,7 @@ func (d *Draft7) IsNil() bool {
 // UnmarshalJSONObject implements gojay.UnmarshalerJSONObject.
 func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 	switch k {
-	case "$schema":
+	case keySchema:
 		o := StringPool.Get().(*String)
 		err := dec.Object(o)
 		if err == nil {
@@ -144,7 +144,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "$id":
+	case keyID:
 		o := StringPool.Get().(*String)
 		err := dec.Object(o)
 		if err == nil {
@@ -152,7 +152,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "title":
+	case keyTitle:
 		o := StringPool.Get().(*String)
 		err := dec.Object(o)
 		if err == nil {
@@ -160,7 +160,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "$ref":
+	case keyRef:
 		o := StringPool.Get().(*String)
 		err := dec.Object(o)
 		if err == nil {
@@ -168,7 +168,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "$comment":
+	case keyComment:
 		o := StringPool.Get().(*String)
 		err := dec.Object(o)
 		if err == nil {
@@ -176,7 +176,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "description":
+	case keyDescription:
 		o := StringPool.Get().(*String)
 		err := dec.Object(o)
 		if err == nil {
@@ -184,11 +184,11 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "default":
+	case keyDefault:
 		iface := d.Default.(interface{})
 		return dec.Interface(&iface)
 
-	case "readOnly":
+	case keyReadOnly:
 		o := BooleanPool.Get().(*Boolean)
 		err := dec.Object(o)
 		if err == nil {
@@ -196,7 +196,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "writeOnly":
+	case keyWriteOnly:
 		o := BooleanPool.Get().(*Boolean)
 		err := dec.Object(o)
 		if err == nil {
@@ -204,10 +204,10 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "examples":
+	case keyExamples:
 		return dec.Array(&d.Examples)
 
-	case "multipleOf":
+	case keyMultipleOf:
 		o := NumberPool.Get().(*Number)
 		err := dec.Object(o)
 		if err == nil {
@@ -215,7 +215,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "maximum":
+	case keyMaximum:
 		o := NumberPool.Get().(*Number)
 		err := dec.Object(o)
 		if err == nil {
@@ -223,7 +223,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "exclusiveMaximum":
+	case keyExclusiveMaximum:
 		o := BooleanPool.Get().(*Boolean)
 		err := dec.Object(o)
 		if err == nil {
@@ -231,7 +231,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "minimum":
+	case keyMinimum:
 		o := NumberPool.Get().(*Number)
 		err := dec.Object(o)
 		if err == nil {
@@ -239,7 +239,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "exclusiveMinimum":
+	case keyExclusiveMinimum:
 		o := BooleanPool.Get().(*Boolean)
 		err := dec.Object(o)
 		if err == nil {
@@ -247,7 +247,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "maxLength":
+	case keyMaxLength:
 		o := IntegerPool.Get().(*Integer)
 		err := dec.Object(o)
 		if err == nil {
@@ -255,7 +255,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "minLength":
+	case keyMinLength:
 		o := IntegerPool.Get().(*Integer)
 		err := dec.Object(o)
 		if err == nil {
@@ -263,17 +263,17 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "pattern":
+	case keyPattern:
 		re := d.Pattern.(interface{})
 		return dec.Interface(&re)
 
-	case "additionalItems":
+	case keyAdditionalItems:
 		return dec.Object(d.AdditionalItems)
 
-	case "items":
+	case keyItems:
 		return dec.Object(d.Items)
 
-	case "maxItems":
+	case keyMaxItems:
 		o := IntegerPool.Get().(*Integer)
 		err := dec.Object(o)
 		if err == nil {
@@ -281,7 +281,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "minItems":
+	case keyMinItems:
 		o := IntegerPool.Get().(*Integer)
 		err := dec.Object(o)
 		if err == nil {
@@ -289,7 +289,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "uniqueItems":
+	case keyUniqueItems:
 		o := BooleanPool.Get().(*Boolean)
 		err := dec.Object(o)
 		if err == nil {
@@ -297,10 +297,10 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "contains":
+	case keyContains:
 		return dec.Object(d.Contains)
 
-	case "maxProperties":
+	case keyMaxProperties:
 		o := IntegerPool.Get().(*Integer)
 		err := dec.Object(o)
 		if err == nil {
@@ -308,7 +308,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "minProperties":
+	case keyMinProperties:
 		o := IntegerPool.Get().(*Integer)
 		err := dec.Object(o)
 		if err == nil {
@@ -316,7 +316,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "required":
+	case keyRequired:
 		o := StringArrayPool.Get().(*StringArray)
 		err := dec.Array(o)
 		if err == nil {
@@ -324,22 +324,22 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "additionalProperties":
+	case keyAdditionalProperties:
 		return dec.Object(d.AdditionalProperties)
 
-	case "definitions":
+	case keyDefinitions:
 		return dec.Object(&d.Definitions)
 
-	case "properties":
+	case keyProperties:
 		return dec.Object(&d.Properties)
 
-	case "patternProperties":
+	case keyPatternProperties:
 		return dec.Object(&d.PatternProperties)
 
-	case "dependencies":
+	case keyDependencies:
 		return dec.Object(d.Dependencies)
 
-	case "propertyNames":
+	case keyPropertyNames:
 		o := Draft7Pool.Get().(*Draft7)
 		err := dec.Object(o)
 		if err == nil {
@@ -347,7 +347,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "const":
+	case keyConst:
 		o := ConstPool.Get().(*Const)
 		err := dec.Object(o)
 		if err == nil {
@@ -355,7 +355,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "enum":
+	case keyEnum:
 		o := EnumPool.Get().(*Enum)
 		err := dec.Array(o)
 		if err == nil {
@@ -363,15 +363,15 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "type":
+	case keyType:
 		t := int(d.Type)
 		return dec.Int(&t)
 
-	case "format":
+	case keyFormat:
 		f := string(d.Format)
 		return dec.String(&f)
 
-	case "contentMediaType":
+	case keyContentMediaType:
 		o := StringPool.Get().(*String)
 		err := dec.Object(o)
 		if err == nil {
@@ -379,7 +379,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "contentEncoding":
+	case keyContentEncoding:
 		o := StringPool.Get().(*String)
 		err := dec.Object(o)
 		if err == nil {
@@ -387,7 +387,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "if":
+	case keyIf:
 		o := Draft7Pool.Get().(*Draft7)
 		err := dec.Object(o)
 		if err == nil {
@@ -395,7 +395,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "then":
+	case keyThen:
 		o := Draft7Pool.Get().(*Draft7)
 		err := dec.Object(o)
 		if err == nil {
@@ -403,7 +403,7 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "else":
+	case keyElse:
 		o := Draft7Pool.Get().(*Draft7)
 		err := dec.Object(o)
 		if err == nil {
@@ -411,16 +411,16 @@ func (d *Draft7) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 		}
 		return err
 
-	case "allOf":
+	case keyAllOf:
 		return dec.Array(&d.AllOf)
 
-	case "anyOf":
+	case keyAnyOf:
 		return dec.Array(&d.AnyOf)
 
-	case "oneOf":
+	case keyOneOf:
 		return dec.Array(&d.OneOf)
 
-	case "not":
+	case keyNot:
 		o := Draft7Pool.Get().(*Draft7)
 		err := dec.Object(o)
 		if err == nil {
