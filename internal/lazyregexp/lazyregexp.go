@@ -11,6 +11,8 @@ package lazyregexp
 import (
 	"regexp"
 	"sync"
+
+	regexpinterface "github.com/zchee/go-jsonschema/pkg/regexp"
 )
 
 // Regexp is a wrapper around regexp.Regexp, where the underlying regexp will be
@@ -24,8 +26,12 @@ type Regexp struct {
 // MustCompile creates a new lazy regexp, delaying the compiling work until it is first
 // needed. If the code is being run as part of tests, the regexp compiling will
 // happen immediately.
-func MustCompile(str string) *Regexp {
+func MustCompile(str string) regexpinterface.Regexp {
 	return &Regexp{str: str}
+}
+
+func (r *Regexp) Copy() regexpinterface.Regexp {
+	return r
 }
 
 func (r *Regexp) re() *regexp.Regexp {
