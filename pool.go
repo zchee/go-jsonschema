@@ -63,7 +63,6 @@ var (
 	ItemsPool       *sync.Pool
 	ConstPool       *sync.Pool
 	EnumPool        *sync.Pool
-	SchemaPool      *sync.Pool
 )
 
 func init() {
@@ -96,13 +95,13 @@ func init() {
 
 // schema
 var (
-	Draft7Pool *sync.Pool
+	SchemaPool *sync.Pool
 )
 
 func init() {
-	Draft7Pool = &sync.Pool{
+	SchemaPool = &sync.Pool{
 		New: func() interface{} {
-			return &Draft7{}
+			return &Schema{}
 		},
 	}
 }

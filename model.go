@@ -30,8 +30,8 @@ var (
 
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (a *Array) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.ArrayKey(keyValue, (*Interfaces)(&a.Value))
-	enc.BoolKey(keyInitialized, a.Initialized)
+	enc.ArrayKeyOmitEmpty(keyValue, (*Interfaces)(&a.Value))
+	enc.BoolKeyOmitEmpty(keyInitialized, a.Initialized)
 }
 
 // IsNil implements gojay.MarshalerJSONObject.
@@ -125,9 +125,9 @@ var (
 
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (b *Boolean) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.BoolKey(keyValue, b.Value)
-	enc.BoolKey(keyDefault, b.Default)
-	enc.BoolKey(keyInitialized, b.Initialized)
+	enc.BoolKeyOmitEmpty(keyValue, b.Value)
+	enc.BoolKeyOmitEmpty(keyDefault, b.Default)
+	enc.BoolKeyOmitEmpty(keyInitialized, b.Initialized)
 }
 
 // IsNil implements gojay.MarshalerJSONObject.
@@ -217,8 +217,8 @@ var (
 
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (i *Integer) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.Int64Key(keyValue, i.Value)
-	enc.BoolKey(keyInitialized, i.Initialized)
+	enc.Int64KeyOmitEmpty(keyValue, i.Value)
+	enc.BoolKeyOmitEmpty(keyInitialized, i.Initialized)
 }
 
 // IsNil implements gojay.MarshalerJSONObject.
@@ -305,8 +305,8 @@ var (
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (n *Null) MarshalJSONObject(enc *gojay.Encoder) {
 	raw := gojay.EmbeddedJSON(n.Value)
-	enc.AddEmbeddedJSONKey(keyValue, &raw)
-	enc.BoolKey(keyInitialized, n.Initialized)
+	enc.AddEmbeddedJSONKeyOmitEmpty(keyValue, &raw)
+	enc.BoolKeyOmitEmpty(keyInitialized, n.Initialized)
 }
 
 // IsNil implements gojay.MarshalerJSONObject.
@@ -397,8 +397,8 @@ var (
 
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (n *Number) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.Float64Key(keyValue, n.Value)
-	enc.BoolKey(keyInitialized, n.Initialized)
+	enc.Float64KeyOmitEmpty(keyValue, n.Value)
+	enc.BoolKeyOmitEmpty(keyInitialized, n.Initialized)
 }
 
 // IsNil implements gojay.MarshalerJSONObject.
@@ -486,8 +486,8 @@ var (
 
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (o *Object) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.AddInterfaceKey(keyValue, o.Value)
-	enc.BoolKey(keyInitialized, o.Initialized)
+	enc.AddInterfaceKeyOmitEmpty(keyValue, o.Value)
+	enc.BoolKeyOmitEmpty(keyInitialized, o.Initialized)
 }
 
 // IsNil implements gojay.MarshalerJSONObject.
@@ -573,8 +573,8 @@ var (
 
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (s *String) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.StringKey(keyValue, s.Value)
-	enc.BoolKey(keyInitialized, s.Initialized)
+	enc.StringKeyOmitEmpty(keyValue, s.Value)
+	enc.BoolKeyOmitEmpty(keyInitialized, s.Initialized)
 }
 
 // IsNil implements gojay.MarshalerJSONObject.

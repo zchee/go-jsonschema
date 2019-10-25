@@ -7,11 +7,9 @@ package jsonschema
 import (
 	"encoding/json"
 	"errors"
+	"regexp"
 
 	"github.com/francoispqt/gojay"
-
-	"github.com/zchee/go-jsonschema/internal/lazyregexp"
-	regexpinterface "github.com/zchee/go-jsonschema/pkg/regexp"
 )
 
 // Type represents a JSON Schema type keyword.
@@ -64,6 +62,7 @@ func (t Type) MarshalJSON() ([]byte, error) {
 		StringType:
 
 		return json.Marshal(t.String())
+
 	default:
 		return nil, errors.New("unknown type")
 	}
@@ -332,7 +331,7 @@ func (s StringArrayStream) UnmarshalStream(dec *gojay.StreamDecoder) error {
 type Default interface{}
 
 // Schemas list of Schema.
-type Schemas []Schema
+type Schemas []*Schema
 
 // MarshalJSONArray implements gojay.MarshalerJSONArray.
 func (ss *Schemas) MarshalJSONArray(enc *gojay.Encoder) {
@@ -351,10 +350,10 @@ func (ss *Schemas) IsNil() bool {
 // UnmarshalJSONArray implements gojay.UnmarshalerJSONArray.
 func (ss *Schemas) UnmarshalJSONArray(dec *gojay.Decoder) error {
 	var s Schema
-	if err := dec.Object(s); err != nil {
+	if err := dec.Object(&s); err != nil {
 		return err
 	}
-	*ss = append(*ss, s)
+	*ss = append(*ss, &s)
 
 	return nil
 }
@@ -406,13 +405,13 @@ func (s SchemasStream) UnmarshalStream(dec *gojay.StreamDecoder) error {
 // However, it’s often useful to validate the items of the array against some schema as well.
 // This is done using the items, additionalItems, and contains keywords.
 type Items struct {
-	Schemas     []Schema
+	Schemas     SchemaList
 	HasMultiple bool
 }
 
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (i *Items) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.ArrayKey(keySchemas, (*Schemas)(&i.Schemas))
+	enc.ArrayKey(keySchemas, &i.Schemas)
 	enc.BoolKey(keyHasMultiple, i.HasMultiple)
 }
 
@@ -427,7 +426,7 @@ func (i *Items) IsNil() bool {
 func (i *Items) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 	switch k {
 	case keySchemas:
-		var ss Schemas
+		var ss SchemaList
 		err := dec.Array(&ss)
 		if err == nil && len(ss) > 0 {
 			i.Schemas = ss
@@ -491,13 +490,13 @@ func (s ItemsStream) UnmarshalStream(dec *gojay.StreamDecoder) error {
 }
 
 // Pattern represents a use regular expressions to express constraints.
-type Pattern regexpinterface.Regexp
+type Pattern *regexp.Regexp
 
 // AdditionalItems represents a JSON Schema AdditionalItems type.
 //
 // The elements of the array may be anything at all.
 type AdditionalItems struct {
-	Schema
+	*Schema
 }
 
 var (
@@ -511,7 +510,7 @@ var (
 
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (ai *AdditionalItems) MarshalJSONObject(enc *gojay.Encoder) {
-	switch ai.Version() {
+	switch ai.Schema.Version() {
 	case DraftVersion7:
 		enc.Object(ai)
 	}
@@ -526,7 +525,7 @@ func (ai *AdditionalItems) IsNil() bool {
 
 // UnmarshalJSONObject implements gojay.UnmarshalerJSONObject.
 func (ai *AdditionalItems) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
-	switch ai.Version() {
+	switch ai.Schema.Version() {
 	case DraftVersion7:
 		return dec.Object(ai)
 	}
@@ -543,10 +542,10 @@ func (*AdditionalItems) NKeys() int { return 0 }
 //
 // Reset reset fields.
 func (ai *AdditionalItems) Reset() {
-	switch ai.Version() {
+	switch ai.Schema.Version() {
 	case DraftVersion7:
 		ai.Reset()
-		Draft7Pool.Put(ai)
+		SchemaPool.Put(ai)
 	}
 }
 
@@ -573,7 +572,7 @@ func (s AdditionalItemsStream) MarshalStream(enc *gojay.StreamEncoder) {
 
 // UnmarshalStream implements gojay.UnmarshalerStream.
 func (s AdditionalItemsStream) UnmarshalStream(dec *gojay.StreamDecoder) error {
-	o := Draft7Pool.Get().(*Draft7)
+	o := SchemaPool.Get().(*Schema)
 	if err := dec.Object(o); err != nil {
 		return err
 	}
@@ -587,7 +586,7 @@ func (s AdditionalItemsStream) UnmarshalStream(dec *gojay.StreamDecoder) error {
 //
 // The additionalProperties keyword may be either a boolean or an object. If additionalProperties is a boolean and set to false, no additional properties will be allowed.
 type AdditionalProperties struct {
-	Schema
+	*Schema
 }
 
 var (
@@ -616,7 +615,7 @@ func (ap *AdditionalProperties) IsNil() bool {
 
 // UnmarshalJSONObject implements gojay.UnmarshalerJSONObject.
 func (ap *AdditionalProperties) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
-	switch ap.Version() {
+	switch ap.Schema.Version() {
 	case DraftVersion7:
 		return dec.Object(ap)
 	}
@@ -633,10 +632,10 @@ func (*AdditionalProperties) NKeys() int { return 0 }
 //
 // Reset reset fields.
 func (ap *AdditionalProperties) Reset() {
-	switch ap.Version() {
+	switch ap.Schema.Version() {
 	case DraftVersion7:
 		ap.Reset()
-		Draft7Pool.Put(ap)
+		SchemaPool.Put(ap)
 	}
 }
 
@@ -663,7 +662,7 @@ func (s AdditionalPropertiesStream) MarshalStream(enc *gojay.StreamEncoder) {
 
 // UnmarshalStream implements gojay.UnmarshalerStream.
 func (s AdditionalPropertiesStream) UnmarshalStream(dec *gojay.StreamDecoder) error {
-	o := Draft7Pool.Get().(*Draft7)
+	o := SchemaPool.Get().(*Schema)
 	if err := dec.Object(o); err != nil {
 		return err
 	}
@@ -689,10 +688,7 @@ var (
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (d Definitions) MarshalJSONObject(enc *gojay.Encoder) {
 	for k, v := range d {
-		switch v.Version() {
-		case DraftVersion7:
-			enc.ObjectKey(k, v.(*Draft7))
-		}
+		enc.ObjectKey(k, &v)
 	}
 }
 
@@ -706,7 +702,7 @@ func (d Definitions) IsNil() bool {
 // UnmarshalJSONObject implements gojay.UnmarshalerJSONObject.
 func (d Definitions) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 	var s Schema
-	err := dec.Object(s)
+	err := dec.Object(&s)
 	if err != nil {
 		return err
 	}
@@ -723,13 +719,10 @@ func (Definitions) NKeys() int { return 0 }
 //
 // Reset reset fields.
 func (d Definitions) Reset() {
-	for i := range d {
-		switch d[i].Version() {
-		case DraftVersion7:
-			d[i].Reset()
-			Draft7Pool.Put(d[i])
-		}
-	}
+	// for i := range d {
+	// 	d[i].Reset()
+	// 	SchemaPool.Put(d[i])
+	// }
 }
 
 // DefinitionsStream represents a stream encoding and decoding to Definitions.
@@ -781,10 +774,7 @@ var (
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (p Properties) MarshalJSONObject(enc *gojay.Encoder) {
 	for k, v := range p {
-		switch v.Version() {
-		case DraftVersion7:
-			enc.ObjectKey(k, v.(*Draft7))
-		}
+		enc.ObjectKey(k, &v)
 	}
 }
 
@@ -798,7 +788,7 @@ func (p Properties) IsNil() bool {
 // UnmarshalJSONObject implements gojay.UnmarshalerJSONObject.
 func (p Properties) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 	var s Schema
-	err := dec.Object(s)
+	err := dec.Object(&s)
 	if err != nil {
 		return err
 	}
@@ -815,13 +805,13 @@ func (Properties) NKeys() int { return 0 }
 //
 // Reset reset fields.
 func (p Properties) Reset() {
-	for i := range p {
-		switch p[i].Version() {
-		case DraftVersion7:
-			p[i].Reset()
-			Draft7Pool.Put(p[i])
-		}
-	}
+	// for i := range p {
+	// 	switch p[i].Version() {
+	// 	case DraftVersion7:
+	// 		p[i].Reset()
+	// 		SchemaPool.Put(p[i])
+	// 	}
+	// }
 }
 
 // PropertiesStream represents a stream encoding and decoding to Properties.
@@ -858,7 +848,7 @@ func (s PropertiesStream) UnmarshalStream(dec *gojay.StreamDecoder) error {
 
 // PatternProperties is the each property name of this object SHOULD be a valid regular expression, according to the ECMA 262 regular expression dialect.
 // Each property value of this object MUST be a valid JSON Schema.
-type PatternProperties map[regexpinterface.Regexp]Schema
+type PatternProperties map[*regexp.Regexp]*Schema
 
 var (
 	// compile time check whether the PatternProperties implements gojay.MarshalerJSONObject interface.
@@ -872,10 +862,7 @@ var (
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (pp PatternProperties) MarshalJSONObject(enc *gojay.Encoder) {
 	for k, v := range pp {
-		switch v.Version() {
-		case DraftVersion7:
-			enc.ObjectKey(k.String(), v.(*Draft7))
-		}
+		enc.ObjectKey(k.String(), v)
 	}
 }
 
@@ -889,13 +876,13 @@ func (pp PatternProperties) IsNil() bool {
 // UnmarshalJSONObject implements gojay.UnmarshalerJSONObject.
 func (pp PatternProperties) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 	var s Schema
-	err := dec.Object(s)
+	err := dec.Object(&s)
 	if err != nil {
 		return err
 	}
-	re := lazyregexp.MustCompile(k)
+	re := regexp.MustCompile(k)
 	if re != nil {
-		pp[re] = s
+		pp[re] = &s
 	}
 
 	return nil
@@ -914,7 +901,7 @@ func (pp PatternProperties) Reset() {
 		switch pp[i].Version() {
 		case DraftVersion7:
 			pp[i].Reset()
-			Draft7Pool.Put(pp[i])
+			SchemaPool.Put(pp[i])
 		}
 	}
 }
@@ -1035,7 +1022,7 @@ func (s NameMapStream) UnmarshalStream(dec *gojay.StreamDecoder) error {
 }
 
 // SchemaMap represents a sttring key map of Schema.
-type SchemaMap map[string]Schema
+type SchemaMap map[string]*Schema
 
 var (
 	// compile time check whether the Schemas implements gojay.MarshalerJSONObject interface.
@@ -1049,10 +1036,7 @@ var (
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (sm SchemaMap) MarshalJSONObject(enc *gojay.Encoder) {
 	for k, v := range sm {
-		switch v.Version() {
-		case DraftVersion7:
-			enc.ObjectKey(k, v.(*Draft7))
-		}
+		enc.ObjectKey(k, v)
 	}
 }
 
@@ -1066,11 +1050,11 @@ func (sm SchemaMap) IsNil() bool {
 // UnmarshalJSONObject implements gojay.UnmarshalerJSONObject.
 func (sm SchemaMap) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 	var s Schema
-	err := dec.Object(s)
+	err := dec.Object(&s)
 	if err != nil {
 		return err
 	}
-	sm[k] = s
+	sm[k] = &s
 
 	return nil
 }
@@ -1124,7 +1108,7 @@ func (s SchemaMapStream) UnmarshalStream(dec *gojay.StreamDecoder) error {
 // DependencyMap represents a Dependencies map.
 type DependencyMap struct {
 	Names   map[string][]string
-	Schemas map[string]Schema
+	Schemas map[string]*Schema
 }
 
 var (
