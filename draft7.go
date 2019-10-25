@@ -4,7 +4,9 @@
 
 package jsonschema
 
-import "github.com/francoispqt/gojay"
+import (
+	"github.com/francoispqt/gojay"
+)
 
 const (
 	// Draft07SchemaURL contains the JSON Schema draft-07 URL.
@@ -75,6 +77,16 @@ var (
 	// compile time check whether the Draft7 implements Pooler interface.
 	_ Pooler = &Draft7{}
 )
+
+// MarshalJSON implements json.Marshaler.
+func (d Draft7) MarshalJSON() ([]byte, error) {
+	return gojay.MarshalJSONObject(&d)
+}
+
+// UnmarshalJSON implements json.Unmarshaler.
+func (d *Draft7) UnmarshalJSON(data []byte) error {
+	return gojay.Unsafe.UnmarshalJSONObject(data, d)
+}
 
 // MarshalJSONObject implements gojay.MarshalerJSONObject.
 func (d *Draft7) MarshalJSONObject(enc *gojay.Encoder) {
